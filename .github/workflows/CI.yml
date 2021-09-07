@@ -43,9 +43,7 @@ jobs:
         run: npm ci
 
       - name: Generate site
-        uses: kameshsampath/antora-site-action@v0.2.4
-        with:
-          antora_playbook: antora-playbook.yml
+        run: npm run build
 
       - name: Publish to GitHub pages
         uses: peaceiris/actions-gh-pages@v3
