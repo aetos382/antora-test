@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    strategy:
+      fail-fast: true
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setu-node@v1
+
+      - name: Cache node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.OS }}-node-
+
+      - name: Cache antora files
+        uses: actions/cache@v2
+        with:
+          path: .cache/antora
+          key: ${{ runner.OS }}-antora-${{ hashFiles('antora-playbook.yml') }}
+          restore-keys: ${{ runner.OS }}-antora-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate site
+        uses: kameshsampath/antora-site-action@v0.2.4
+        with:
+          antora_playbook: antora-playbook.yml
+
+      - name: Publish to GitHub pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: ./build
