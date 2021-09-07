@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup node
-        uses: actions/setu-node@v1
+        uses: actions/setup-node@v1
 
       - name: Cache node.js modules
         uses: actions/cache@v2
