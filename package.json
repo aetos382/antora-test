@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "antora generate playbook.yml"
+    "build-local": "antora generate --clean antora-playbook-local.yml"
   },
   "author": "aetos",
   "license": "CC-BY-ND-4.0",
